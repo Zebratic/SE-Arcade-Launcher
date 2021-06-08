@@ -1,41 +1,24 @@
-﻿- Highscore system - local or server sided?
-- Record Playtime - 1 credit pr. minute
-- Friends system? - Online, Offline, Last played, Play time
-- HWID check on dedicated auth server
-- Add PS4/PS3/Joystick Support for menu
+- = Not done
+/ = In the works
+X = Finished
+
+- Highscore system
+- Record Playtime
+X Add PS4/PS3/Joystick Support for menu
 X Import steam library - Scan for games
 X manual add game files to library
 X Show exe cover on games page
 X launch parameters for games
 X specific path per game
 X Game Settings
-- Credits system - bertram & laurits?? - local or server sided? - 1 credit pr. minute
-- Settings page for launcher - show specs + performance
+- Credits system - bertram & laurits??
+X Settings page for launcher - show specs + performance
 - Setup Guide - Help Section
-- Restrict certain processes
-/ Make launch from startup and force fullscreen ish and topmost - Launcher
-- Keyboard only controls for launcher - Gamepad
-- Local LAN TCP Server to communicate with 2nd arcade - more players / launcher
-- Inbuilt emulator?
+/ Restrict certain processes
+X Make launch from startup and force fullscreen ish and topmost - Launcher
+- Inbuilt emulators?
   - SNES: https://github.com/Kookpot/SuperNintendoEmulator
   - NES: https://github.com/Xyene/Emulator.NES
   - GAME BOY: https://github.com/BluestormDNA/ProjectDMG
   - MAME: https://github.com/mamedev/mame
   - SWITCH: https://github.com/Ryujinx/Ryujinx
-
-
-Panel Specifications:
-	0-0: 12; 42
-	0-1: 188; 42
-	0-2: 364; 42
-	0-3: 540; 42
-	1-0: 12; 285
-	1-1: 188; 285
-	1-2: 364; 285
-	1-3: 540; 285
-
-	X difference: 176
-	Y difference: 243
-
-	X size: 170
-	Y size: 237
