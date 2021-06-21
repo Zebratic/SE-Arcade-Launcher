@@ -13,5 +13,7 @@ There is known issues with the launcher, but it have been noted down, and will b
 
 ## Digital Manuals:
 [Download English Manual](https://github.com/Zebratic/SE-Arcade-Launcher/ENGLISH_MANUAL)
+
 [Download Deutsch Manual](https://github.com/Zebratic/SE-Arcade-Launcher/DEUTSCH_MANUAL)
+
 [Download Danish Manual](https://github.com/Zebratic/SE-Arcade-Launcher/DANISH_MANUAL)
