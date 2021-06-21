@@ -15,6 +15,7 @@ using SuperfastBlur;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using SE_Arcade_Launcher.Libraries.DX;
+using System.Media;
 
 namespace SE_Arcade_Launcher
 {
@@ -41,17 +42,32 @@ namespace SE_Arcade_Launcher
         private bool JoystickTesting = false;
         private bool FinishedScanning = false;
         private bool GameRunning = false;
+        private int QuitValue = 0;
         private int CurrentPage = 0;
         private int CurrentGameNum = 1;
         private int KeepScrollSpeed = 1;
+
+        private bool RuneMode { get; set; }
+        private int EasterEggRuneCounter = 0;
+
+        private int EasterEggSusCounter = 0;
+        public frmStartup Intro { get; set; }
+
+        public bool ShowingIntro = true;
 
         private XBoxController Controller = new XBoxController();
         #endregion params
 
         #region Startup
-        public frmMainMenu()
+        public frmMainMenu(bool skipped = true)
         {
             InitializeComponent();
+            if (!skipped)
+            {
+                this.Visible = false;
+                this.Opacity = 0;
+                this.Hide();
+            }
 
             this.WindowState = FormWindowState.Maximized;
             this.DoubleBuffered = true;
@@ -79,25 +95,29 @@ namespace SE_Arcade_Launcher
             btnCancelLoad.Visible = false;
             BlurPanel.Controls.Add(btnCancelLoad);
 
+            /*
             LJoystickPos.Size = new Size(4, 4);
             LJoystickPos.BackColor = Color.Red;
             LJoystickPos.Location = new Point(50 - (LJoystickPos.Size.Width / 2), 50 - (LJoystickPos.Size.Width / 2)); // get correct pos
             LJoystickArea.Controls.Add(LJoystickPos);
             LJoystickPos.BringToFront();
 
+            
             RJoystickPos.Size = new Size(4, 4);
             RJoystickPos.BackColor = Color.Red;
             RJoystickPos.Location = new Point(50 - (RJoystickPos.Size.Width / 2), 50 - (RJoystickPos.Size.Width / 2)); // get correct pos
             this.Controls.Add(RJoystickPos);
             RJoystickPos.BringToFront();
+            */
 
-            pnlNav.Height = btnGames.Height;
-            pnlNav.Top = btnGames.Top;
-            pnlNav.Left = btnGames.Left;
+            pnlNav.Height = btnControls.Height;
+            pnlNav.Top = btnControls.Top;
+            pnlNav.Left = btnControls.Left;
             pnlNav.BringToFront();
 
-            GamesPanel.Visible = true;
-            HighscoresPanel.Visible = false;
+            CurrentPage = 1;
+            GamesPanel.Visible = false;
+            ControlsPanel.Visible = true;
             CreditsPanel.Visible = false;
             PerformancePanel.Visible = false;
             SettingsPanel.Visible = false;
@@ -107,6 +127,7 @@ namespace SE_Arcade_Launcher
             new Thread(WaitforController).Start();
 
             IconFilterString = File.ReadAllText(Environment.CurrentDirectory + "\\Filters\\IconFilter.txt");
+
 
             PerformanceTimer.Start();
 
@@ -178,16 +199,89 @@ namespace SE_Arcade_Launcher
         {
             try
             {
-                // Volume Controls
-                if (Controller.Back.Value)
+                if (!GameRunning)
                 {
-                    VolumeControl.VolumeDown();
+                    // Volume Controls
+                    if (Controller.Back.Value)
+                        VolumeControl.VolumeDown();
+
+                    if (Controller.Start.Value)
+                        VolumeControl.VolumeUp();
+                }
+                else
+                {
+                    if (QuitValue > 15)
+                    {
+                        SendKeys.SendWait("(%{F4})");
+                        GameRunning = false;
+                        ShowLoadingScreen(false);
+                        QuitValue = 0;
+                    }
+                    else if (Controller.Back.Value && Controller.Start.Value)
+                        QuitValue++;
+                    else if (!Controller.Back.Value && QuitValue != 0 || !Controller.Start.Value && QuitValue != 0)
+                    {
+                        QuitValue = 0;
+                    }
                 }
 
-                if (Controller.Start.Value)
+                #region Easter Egg
+                if (!GameRunning)
                 {
-                    VolumeControl.VolumeUp();
+                    if (Controller.B.Value || Controller.A.Value || Controller.RightShoulder.Value || Controller.Y.Value)
+                    {
+                        if (SusEasterEgg(Controller))
+                        {
+                            new Thread(PlaySus).Start();
+                            foreach (Panel pnl in Games)
+                                pnl.BackgroundImage = Properties.Resources.sus1;
+                            foreach (Label lbl in GameLabels)
+                            {
+                                int x = rnd.Next(0, 4);
+                                if (x == 0)
+                                    lbl.Text = "Sus.exe";
+                                else if (x == 1)
+                                    lbl.Text = "Drip.exe";
+                                else if (x == 2)
+                                    lbl.Text = "Amogus.exe";
+                                else if (x == 3)
+                                    lbl.Text = "Sussy Balls.exe";
+                            }
+                        }
+                    }
+                    if (Controller.Up.Value || Controller.Down.Value || Controller.Left.Value || Controller.Right.Value || Controller.B.Value || Controller.A.Value)
+                    {
+                        if (RuneEasterEgg(Controller))
+                        {
+                            RuneMode = true;
+                            if (RuneMode)
+                            {
+                                
+                                foreach (Control c in GetAll(this))
+                                {
+                                    try
+                                    {
+                                        if (c is PictureBox)
+                                        {
+                                            ((PictureBox)c).Image = Properties.Resources.Rune;
+                                            ((PictureBox)c).BackgroundImageLayout = ImageLayout.Stretch;
+                                        }
+                                        else
+                                        {
+                                            c.BackgroundImage = Properties.Resources.Rune;
+                                            c.BackgroundImageLayout = ImageLayout.Stretch;
+                                        }
+                                    }
+                                    catch (Exception ex) { MessageBox.Show(ex.ToString()); }
+                                }
+                            }
+                            ReloadLauncher();
+                            return;
+                        }
+                    }
+
                 }
+                #endregion
 
                 if (JoystickTesting)
                 {
@@ -197,8 +291,7 @@ namespace SE_Arcade_Launcher
                     LeftStickValueLabel.Text = "X: " + Controller.LeftThumbstick.Value.X + "\nY: " + Controller.LeftThumbstick.Value.Y;
                     RightStickValueLabel.Text = "X: " + Controller.RightThumbstick.Value.X + "\nY: " + Controller.RightThumbstick.Value.X;
                     
-
-                   /*
+                    /*
                     lblControllerDebug.Text =
                         "ARx: " + joystick.state.ARx + "\n" +
                         "ARy: " + joystick.state.ARy + "\n" +
@@ -224,7 +317,7 @@ namespace SE_Arcade_Launcher
                         "X: " + joystick.state.X + "\n" +
                         "Y: " + joystick.state.Y + "\n" +
                         "Z: " + joystick.state.Z;
-                   */
+                    */
 
                     lblControllerDebug.Text = "A: " + Controller.A.Value + "\n" +
                                               "B: " + Controller.B.Value + "\n" +
@@ -257,30 +350,58 @@ namespace SE_Arcade_Launcher
 
                     MaxValueLabels.Text = "X: " + MaxXValue.Value + "      Y: " + MaxYValue.Value;
                     
-                    if (Controller.RightThumbstick.Value.X < 65535 - MaxXValue.Value + 1)
+                    // Right Thumbstick
+                    if (Controller.RightThumbstick.Value.X < 65535 - MaxXValue.Value + 1 && !Controller.RightThumbstick.Value.X.ToString().Contains("E"))
                     {
                         JoystickOutput.Text += "\nRight Thumbstick Left";
                         ScrollToBottom();
                     }
 
-                    if (Controller.RightThumbstick.Value.X > MaxXValue.Value - 1)
+                    if (Controller.RightThumbstick.Value.X > MaxXValue.Value - 1 && !Controller.RightThumbstick.Value.X.ToString().Contains("E"))
                     {
                         JoystickOutput.Text += "\nRight Thumbstick Right";
                         ScrollToBottom();
                     }
 
-                    if (Controller.RightThumbstick.Value.Y < 65535 - MaxYValue.Value + 1)
+                    if (Controller.RightThumbstick.Value.Y < 65535 - MaxYValue.Value + 1 && !Controller.RightThumbstick.Value.Y.ToString().Contains("E"))
                     {
                         JoystickOutput.Text += "\nRight Thumbstick Up";
                         ScrollToBottom();
                     }
 
-                    if (Controller.RightThumbstick.Value.Y > MaxYValue.Value - 1)
+                    if (Controller.RightThumbstick.Value.Y > MaxYValue.Value - 1 && !Controller.RightThumbstick.Value.Y.ToString().Contains("E"))
                     {
                         JoystickOutput.Text += "\nRight Thumbstick Down";
                         ScrollToBottom();
                     }
 
+                    // Left Thumbstick
+                    if (Controller.LeftThumbstick.Value.X < 65535 - MaxXValue.Value + 1 && !Controller.LeftThumbstick.Value.X.ToString().Contains("E"))
+                    {
+                        JoystickOutput.Text += "\nLeft Thumbstick Left";
+                        ScrollToBottom();
+                    }
+
+                    if (Controller.LeftThumbstick.Value.X > MaxXValue.Value - 1 && !Controller.LeftThumbstick.Value.X.ToString().Contains("E"))
+                    {
+                        JoystickOutput.Text += "\nLeft Thumbstick Right";
+                        ScrollToBottom();
+                    }
+
+                    if (Controller.LeftThumbstick.Value.Y < 65535 - MaxYValue.Value + 1 && !Controller.LeftThumbstick.Value.Y.ToString().Contains("E"))
+                    {
+                        JoystickOutput.Text += "\nLeft Thumbstick Up";
+                        ScrollToBottom();
+                    }
+
+                    if (Controller.LeftThumbstick.Value.Y > MaxYValue.Value - 1 && !Controller.LeftThumbstick.Value.Y.ToString().Contains("E"))
+                    {
+                        JoystickOutput.Text += "\nLeft Thumbstick Down";
+                        ScrollToBottom();
+                    }
+
+                    // PS4 Triggers
+                    /*
                     if (Convert.ToInt32(Controller.LeftTrigger.Value) == 1)
                         ControllerButton_L2.Invoke((MethodInvoker)delegate { ControllerButton_L2.Visible = true; });
                     else
@@ -290,33 +411,85 @@ namespace SE_Arcade_Launcher
                         ControllerButton_R2.Invoke((MethodInvoker)delegate { ControllerButton_R2.Visible = true; });
                     else
                         ControllerButton_R2.Invoke((MethodInvoker)delegate { ControllerButton_R2.Visible = false; });
+                    */
 
+                    #region Hori Joystick Buttons + DPad
                     if (Controller.Left.Value)
                     {
                         JoystickOutput.Text += "\nDPad Left";
                         ScrollToBottom();
                     }
-
                     if (Controller.Right.Value)
                     {
                         JoystickOutput.Text += "\nDPad Right";
                         ScrollToBottom();
                     }
-
                     if (Controller.Up.Value)
                     {
                         JoystickOutput.Text += "\nDPad Up";
                         ScrollToBottom();
                     }
-
                     if (Controller.Down.Value)
                     {
                         JoystickOutput.Text += "\nDPad Down";
                         ScrollToBottom();
                     }
+                    if (Controller.A.Value)
+                    {
+                        JoystickOutput.Text += "\nA Pressed";
+                        ScrollToBottom();
+                    }
+                    if (Controller.B.Value)
+                    {
+                        JoystickOutput.Text += "\nB Pressed";
+                        ScrollToBottom();
+                    }
+                    if (Controller.X.Value)
+                    {
+                        JoystickOutput.Text += "\nX Pressed";
+                        ScrollToBottom();
+                    }
+                    if (Controller.Y.Value)
+                    {
+                        JoystickOutput.Text += "\nY Pressed";
+                        ScrollToBottom();
+                    }
+                    if (Controller.LeftShoulder.Value)
+                    {
+                        JoystickOutput.Text += "\nL Pressed";
+                        ScrollToBottom();
+                    }
+                    if (Controller.RightShoulder.Value)
+                    {
+                        JoystickOutput.Text += "\nR Pressed";
+                        ScrollToBottom();
+                    }
+                    if (Controller.Start.Value)
+                    {
+                        JoystickOutput.Text += "\n+ Pressed";
+                        ScrollToBottom();
+                    }
+                    if (Controller.Back.Value)
+                    {
+                        JoystickOutput.Text += "\n- Pressed";
+                        ScrollToBottom();
+                    }
+                    if (Controller.LeftTrigger.Value == 1)
+                    {
+                        JoystickOutput.Text += "\nZL Pressed";
+                        ScrollToBottom();
+                    }
+                    if (Controller.RightTrigger.Value == 1)
+                    {
+                        JoystickOutput.Text += "\nZR Pressed";
+                        ScrollToBottom();
+                    }
+                    #endregion
+
+
 
                     /*
-                    for (int i = 0; i < joystickButtons.Length; i++)
+                    for (int i = 0; i < Controller.Length; i++)
                     {
                         if (joystickButtons[i] == true)
                         {
@@ -364,6 +537,7 @@ namespace SE_Arcade_Launcher
                             SelectGame(-1);
                             JoystickOutput.Text += "\nDPad Left";
                             ScrollToBottom();
+                            EditGameMenu.Hide();
                         }
 
                         if (Controller.Right.Value)
@@ -371,6 +545,7 @@ namespace SE_Arcade_Launcher
                             SelectGame(1);
                             JoystickOutput.Text += "\nDPad Right";
                             ScrollToBottom();
+                            EditGameMenu.Hide();
                         }
 
                         if (Controller.Up.Value)
@@ -378,6 +553,7 @@ namespace SE_Arcade_Launcher
                             SelectGame(-9);
                             JoystickOutput.Text += "\nDPad Up";
                             ScrollToBottom();
+                            EditGameMenu.Hide();
                         }
 
                         if (Controller.Down.Value)
@@ -385,6 +561,7 @@ namespace SE_Arcade_Launcher
                             SelectGame(9);
                             JoystickOutput.Text += "\nDPad Down";
                             ScrollToBottom();
+                            EditGameMenu.Hide();
                         }
 
                         // Right Joystick
@@ -430,8 +607,10 @@ namespace SE_Arcade_Launcher
                     {
                         if (Controller.LeftShoulder.Value) // menu up
                         {
+                            EditGameMenu.Hide();
+
                             btnGames.BackColor = Color.FromArgb(24, 30, 54);
-                            btnHighscores.BackColor = Color.FromArgb(24, 30, 54);
+                            btnControls.BackColor = Color.FromArgb(24, 30, 54);
                             btnCredits.BackColor = Color.FromArgb(24, 30, 54);
                             btnPerformance.BackColor = Color.FromArgb(24, 30, 54);
                             btnSettings.BackColor = Color.FromArgb(24, 30, 54);
@@ -441,7 +620,7 @@ namespace SE_Arcade_Launcher
                             else if (CurrentPage == 1)
                                 btnGames.PerformClick();
                             else if (CurrentPage == 2)
-                                btnHighscores.PerformClick();
+                                btnControls.PerformClick();
                             else if (CurrentPage == 3)
                                 btnCredits.PerformClick();
                             else if (CurrentPage == 4)
@@ -450,14 +629,16 @@ namespace SE_Arcade_Launcher
 
                         if (Convert.ToInt32(Controller.LeftTrigger.Value) == 1) // menu down
                         {
+                            EditGameMenu.Hide();
+
                             btnGames.BackColor = Color.FromArgb(24, 30, 54);
-                            btnHighscores.BackColor = Color.FromArgb(24, 30, 54);
+                            btnControls.BackColor = Color.FromArgb(24, 30, 54);
                             btnCredits.BackColor = Color.FromArgb(24, 30, 54);
                             btnPerformance.BackColor = Color.FromArgb(24, 30, 54);
                             btnSettings.BackColor = Color.FromArgb(24, 30, 54);
 
                             if (CurrentPage == 0)
-                                btnHighscores.PerformClick();
+                                btnControls.PerformClick();
                             else if (CurrentPage == 1)
                                 btnCredits.PerformClick();
                             else if (CurrentPage == 2)
@@ -470,15 +651,16 @@ namespace SE_Arcade_Launcher
 
                         if (Controller.A.Value && GamesPanel.Visible) // start game
                         {
-                            Panel FoundPanel = Games.Find(x => x.BackColor == Color.FromArgb(67, 72, 84));
+                            EditGameMenu.Hide();
+                            Panel FoundPanel = Games.Find(x => x.BackColor == Color.FromArgb(87, 92, 104));
                             List<GameData> PossibleGames = gameSaveData.FindAll(x => x.GamePanel.LocationX == FoundPanel.Location.X);
                             GameData SelectedGame = PossibleGames.Find(x => x.GamePanel.LocationY == FoundPanel.Location.Y);
                             StartGame(null, null, SelectedGame);
                         }
-
-                        if (Controller.X.Value && GamesPanel.Visible)
+                        
+                        if (Controller.X.Value && GamesPanel.Visible && LoginSystem.LoggedInAccount.Admin)
                         {
-                            Panel FoundPanel = Games.Find(x => x.BackColor == Color.FromArgb(67, 72, 84));
+                            Panel FoundPanel = Games.Find(x => x.BackColor == Color.FromArgb(87, 92, 104));
                             List<GameData> PossibleGames = gameSaveData.FindAll(x => x.GamePanel.LocationX == FoundPanel.Location.X);
                             GameData SelectedGame = PossibleGames.Find(x => x.GamePanel.LocationY == FoundPanel.Location.Y);
 
@@ -556,9 +738,8 @@ namespace SE_Arcade_Launcher
                         pnl.BackColor = Color.FromArgb(37, 42, 64);
 
                     Point pPanel = new Point(SelectedGame.GamePanel.LocationX, SelectedGame.GamePanel.LocationY - Math.Abs(GamesPanel.VerticalScroll.Value));
-
                     Panel GamePanel = Games.Find(x => x.Location == pPanel);
-                    GamePanel.BackColor = Color.FromArgb(67, 72, 84);
+                    GamePanel.BackColor = Color.FromArgb(87, 92, 104);
 
                     // Label
                     foreach (Label lbl in GameLabels)
@@ -566,7 +747,7 @@ namespace SE_Arcade_Launcher
 
                     Point pLabel = new Point(SelectedGame.GameLabel.LocationX, SelectedGame.GameLabel.LocationY - Math.Abs(GamesPanel.VerticalScroll.Value));
                     Label GameLabel = GameLabels.Find(x => x.Location == pLabel);
-                    GameLabel.ForeColor = Color.FromArgb(69, 163, 255);
+                    GameLabel.ForeColor = Color.FromArgb(255, 255, 255);
 
                     // auto scrolling
                     if (GameLabel.Location.Y > (GamesPanel.Location.Y + GamesPanel.Size.Height - 250))
@@ -580,12 +761,12 @@ namespace SE_Arcade_Launcher
 
                     CurrentGameNum += savednum;
                 }
-                catch (Exception ex)
+                catch
                 {
                     //MessageBox.Show(ex.ToString());
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 //MessageBox.Show(ex.ToString());
             }
@@ -705,22 +886,22 @@ namespace SE_Arcade_Launcher
 
             lbltitle.Text = "All Games";
             GamesPanel.Visible = true;
-            HighscoresPanel.Visible = false;
+            ControlsPanel.Visible = false;
             CreditsPanel.Visible = false;
             PerformancePanel.Visible = false;
             SettingsPanel.Visible = false;
             CurrentPage = 0;
         }
 
-        private void btnHighscores_Click(object sender, EventArgs e)
+        private void btnControls_Click(object sender, EventArgs e)
         {
-            pnlNav.Height = btnHighscores.Height;
-            pnlNav.Top = btnHighscores.Top;
-            btnHighscores.BackColor = Color.FromArgb(46, 51, 73);
+            pnlNav.Height = btnControls.Height;
+            pnlNav.Top = btnControls.Top;
+            btnControls.BackColor = Color.FromArgb(46, 51, 73);
 
-            lbltitle.Text = "Highscores";
+            lbltitle.Text = "Controls";
             GamesPanel.Visible = false;
-            HighscoresPanel.Visible = true;
+            ControlsPanel.Visible = true;
             CreditsPanel.Visible = false;
             PerformancePanel.Visible = false;
             SettingsPanel.Visible = false;
@@ -735,7 +916,7 @@ namespace SE_Arcade_Launcher
 
             lbltitle.Text = "Credits";
             GamesPanel.Visible = false;
-            HighscoresPanel.Visible = false;
+            ControlsPanel.Visible = false;
             CreditsPanel.Visible = true;
             PerformancePanel.Visible = false;
             SettingsPanel.Visible = false;
@@ -750,7 +931,7 @@ namespace SE_Arcade_Launcher
 
             lbltitle.Text = "Performance";
             GamesPanel.Visible = false;
-            HighscoresPanel.Visible = false;
+            ControlsPanel.Visible = false;
             CreditsPanel.Visible = false;
             PerformancePanel.Visible = true;
             SettingsPanel.Visible = false;
@@ -765,7 +946,7 @@ namespace SE_Arcade_Launcher
 
             lbltitle.Text = "Settings";
             GamesPanel.Visible = false;
-            HighscoresPanel.Visible = false;
+            ControlsPanel.Visible = false;
             CreditsPanel.Visible = false;
             PerformancePanel.Visible = false;
             SettingsPanel.Visible = true;
@@ -784,7 +965,7 @@ namespace SE_Arcade_Launcher
 
         private void btnHighscores_Leave(object sender, EventArgs e)
         {
-            btnHighscores.BackColor = Color.FromArgb(24, 30, 54);
+            btnControls.BackColor = Color.FromArgb(24, 30, 54);
         }
 
         private void btnCredits_Leave(object sender, EventArgs e)
@@ -980,7 +1161,7 @@ namespace SE_Arcade_Launcher
 
         private void ShowEditMenu(object sender, MouseEventArgs e, GameData gameSettings, Panel gamePanel, Label gameLabel)
         {
-            if (e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right && LoginSystem.LoggedInAccount.Admin)
             {
                 SelectedGameData = gameSettings;
                 SelectedGamePanel = gamePanel;
@@ -1255,12 +1436,13 @@ namespace SE_Arcade_Launcher
             if (JoystickTesting)
             {
                 btnStartTest.Text = "Start Test";
+                JoystickTesting = false;
             }
             else
             {
                 btnStartTest.Text = "Stop Test";
+                JoystickTesting = true;
             }
-            JoystickTesting = !JoystickTesting;
         }
 
         private void frmMainMenu_FormClosing(object sender, FormClosingEventArgs e)
@@ -1283,6 +1465,89 @@ namespace SE_Arcade_Launcher
         {
             if (!GameRunning)
                 try { SetForegroundWindow(this.ActiveControl.Handle); } catch { }
+        }
+
+        private bool RuneEasterEgg(XBoxController xbc)
+        {
+            if (EasterEggRuneCounter == 0 && xbc.Up.Value)
+                EasterEggRuneCounter++;
+            else if (EasterEggRuneCounter == 1 && xbc.Up.Value)
+                EasterEggRuneCounter++;
+            else if (EasterEggRuneCounter == 2 && xbc.Down.Value)
+                EasterEggRuneCounter++;
+            else if (EasterEggRuneCounter == 3 && xbc.Down.Value)
+                EasterEggRuneCounter++;
+            else if (EasterEggRuneCounter == 4 && xbc.Left.Value)
+                EasterEggRuneCounter++;
+            else if (EasterEggRuneCounter == 5 && xbc.Right.Value)
+                EasterEggRuneCounter++;
+            else if (EasterEggRuneCounter == 6 && xbc.Left.Value)
+                EasterEggRuneCounter++;
+            else if (EasterEggRuneCounter == 7 && xbc.Right.Value)
+                EasterEggRuneCounter++;
+            else if (EasterEggRuneCounter == 8 && xbc.B.Value)
+                EasterEggRuneCounter++;
+            else if (EasterEggRuneCounter == 9 && xbc.A.Value)
+            {
+                Notification.Alert("Rune mode activated", Notification.enmType.Success);
+                EasterEggRuneCounter = 0;
+                return true;
+            }
+            else
+            {
+                if (EasterEggRuneCounter > 5 && !JoystickTesting)
+                    Notification.Alert("hmm... Maybe try on testing mode?", Notification.enmType.Info);
+
+                EasterEggRuneCounter = 0;
+            }
+
+            return false;
+        }
+
+        private bool SusEasterEgg(XBoxController xbc)
+        {
+            if (EasterEggSusCounter == 0 && xbc.B.Value)
+                EasterEggSusCounter++;
+            else if (EasterEggSusCounter == 1 && xbc.A.Value)
+                EasterEggSusCounter++;
+            else if (EasterEggSusCounter == 2 && xbc.RightShoulder.Value)
+                EasterEggSusCounter++;
+            else if (EasterEggSusCounter == 3 && xbc.RightShoulder.Value)
+                EasterEggSusCounter++;
+            else if (EasterEggSusCounter == 4 && xbc.Y.Value)
+            {
+                Notification.Alert("Sus mode activated", Notification.enmType.Success);
+                EasterEggSusCounter = 0;
+                return true;
+            }
+            else
+            {
+                if (EasterEggRuneCounter > 2 && !JoystickTesting)
+                    Notification.Alert("hmm... Maybe try on testing mode?", Notification.enmType.Info);
+
+                EasterEggSusCounter = 0;
+            }
+
+            return false;
+        }
+
+        public IEnumerable<Control> GetAll(Control control)
+        {
+            var controls = control.Controls.Cast<Control>();
+
+            return controls.SelectMany(ctrl => GetAll(ctrl)).Concat(controls);
+        }
+
+        private void ReloadLauncher()
+        {
+            this.Hide();
+            Intro.Reload(this);
+        }
+
+        private void PlaySus()
+        {
+            SoundPlayer sus = new SoundPlayer(Properties.Resources.sus);
+            sus.PlaySync();
         }
     }
 }

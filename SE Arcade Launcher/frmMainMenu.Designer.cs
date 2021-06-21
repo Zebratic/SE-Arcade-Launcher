@@ -33,18 +33,18 @@ namespace SE_Arcade_Launcher
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCredits = new System.Windows.Forms.Button();
             this.btnPerformance = new System.Windows.Forms.Button();
             this.pnlNav = new System.Windows.Forms.Panel();
             this.btnSettings = new System.Windows.Forms.Button();
-            this.btnHighscores = new System.Windows.Forms.Button();
+            this.btnControls = new System.Windows.Forms.Button();
             this.btnGames = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblCredits = new System.Windows.Forms.Label();
@@ -60,8 +60,10 @@ namespace SE_Arcade_Launcher
             this.EditGame = new System.Windows.Forms.ToolStripMenuItem();
             this.btnRemoveGame = new System.Windows.Forms.ToolStripMenuItem();
             this.copyIconDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.HighscoresPanel = new System.Windows.Forms.Panel();
+            this.ControlsPanel = new System.Windows.Forms.Panel();
+            this.picHoriControls = new System.Windows.Forms.PictureBox();
             this.SettingsPanel = new System.Windows.Forms.Panel();
+            this.lblControllerDebug = new System.Windows.Forms.Label();
             this.RJoystickArea = new System.Windows.Forms.Panel();
             this.LJoystickArea = new System.Windows.Forms.Panel();
             this.lblDeadzone = new System.Windows.Forms.Label();
@@ -113,12 +115,13 @@ namespace SE_Arcade_Launcher
             this.lblCreditsTitle = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
             this.LockdownTimer = new System.Windows.Forms.Timer(this.components);
-            this.lblControllerDebug = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.UserProfilePicture)).BeginInit();
             this.GamesPanel.SuspendLayout();
             this.EditGameMenu.SuspendLayout();
+            this.ControlsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picHoriControls)).BeginInit();
             this.SettingsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ControllerButton_RStick)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ControllerButton_LStick)).BeginInit();
@@ -153,13 +156,13 @@ namespace SE_Arcade_Launcher
             this.panel1.Controls.Add(this.btnPerformance);
             this.panel1.Controls.Add(this.pnlNav);
             this.panel1.Controls.Add(this.btnSettings);
-            this.panel1.Controls.Add(this.btnHighscores);
+            this.panel1.Controls.Add(this.btnControls);
             this.panel1.Controls.Add(this.btnGames);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(186, 1080);
+            this.panel1.Size = new System.Drawing.Size(186, 894);
             this.panel1.TabIndex = 0;
             // 
             // btnCredits
@@ -170,7 +173,7 @@ namespace SE_Arcade_Launcher
             this.btnCredits.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCredits.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
             this.btnCredits.Image = global::SE_Arcade_Launcher.Properties.Resources.Conact;
-            this.btnCredits.Location = new System.Drawing.Point(0, 954);
+            this.btnCredits.Location = new System.Drawing.Point(0, 768);
             this.btnCredits.Name = "btnCredits";
             this.btnCredits.Size = new System.Drawing.Size(186, 42);
             this.btnCredits.TabIndex = 4;
@@ -188,7 +191,7 @@ namespace SE_Arcade_Launcher
             this.btnPerformance.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPerformance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
             this.btnPerformance.Image = global::SE_Arcade_Launcher.Properties.Resources.diagram;
-            this.btnPerformance.Location = new System.Drawing.Point(0, 996);
+            this.btnPerformance.Location = new System.Drawing.Point(0, 810);
             this.btnPerformance.Name = "btnPerformance";
             this.btnPerformance.Size = new System.Drawing.Size(186, 42);
             this.btnPerformance.TabIndex = 3;
@@ -214,7 +217,7 @@ namespace SE_Arcade_Launcher
             this.btnSettings.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSettings.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
             this.btnSettings.Image = global::SE_Arcade_Launcher.Properties.Resources.settings;
-            this.btnSettings.Location = new System.Drawing.Point(0, 1038);
+            this.btnSettings.Location = new System.Drawing.Point(0, 852);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(186, 42);
             this.btnSettings.TabIndex = 1;
@@ -224,23 +227,23 @@ namespace SE_Arcade_Launcher
             this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             this.btnSettings.Leave += new System.EventHandler(this.btnsettings_Leave);
             // 
-            // btnHighscores
+            // btnControls
             // 
-            this.btnHighscores.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnHighscores.FlatAppearance.BorderSize = 0;
-            this.btnHighscores.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHighscores.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHighscores.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
-            this.btnHighscores.Image = global::SE_Arcade_Launcher.Properties.Resources.calendar;
-            this.btnHighscores.Location = new System.Drawing.Point(0, 196);
-            this.btnHighscores.Name = "btnHighscores";
-            this.btnHighscores.Size = new System.Drawing.Size(186, 42);
-            this.btnHighscores.TabIndex = 1;
-            this.btnHighscores.Text = "Highscores";
-            this.btnHighscores.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnHighscores.UseVisualStyleBackColor = true;
-            this.btnHighscores.Click += new System.EventHandler(this.btnHighscores_Click);
-            this.btnHighscores.Leave += new System.EventHandler(this.btnHighscores_Leave);
+            this.btnControls.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnControls.FlatAppearance.BorderSize = 0;
+            this.btnControls.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnControls.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnControls.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.btnControls.Image = global::SE_Arcade_Launcher.Properties.Resources.calendar;
+            this.btnControls.Location = new System.Drawing.Point(0, 196);
+            this.btnControls.Name = "btnControls";
+            this.btnControls.Size = new System.Drawing.Size(186, 42);
+            this.btnControls.TabIndex = 1;
+            this.btnControls.Text = "Controls";
+            this.btnControls.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnControls.UseVisualStyleBackColor = true;
+            this.btnControls.Click += new System.EventHandler(this.btnControls_Click);
+            this.btnControls.Leave += new System.EventHandler(this.btnHighscores_Leave);
             // 
             // btnGames
             // 
@@ -421,13 +424,24 @@ namespace SE_Arcade_Launcher
             this.copyIconDataToolStripMenuItem.Text = "Copy Icon Data";
             this.copyIconDataToolStripMenuItem.Click += new System.EventHandler(this.copyIconDataToolStripMenuItem_Click);
             // 
-            // HighscoresPanel
+            // ControlsPanel
             // 
-            this.HighscoresPanel.AutoScroll = true;
-            this.HighscoresPanel.Location = new System.Drawing.Point(186, 58);
-            this.HighscoresPanel.Name = "HighscoresPanel";
-            this.HighscoresPanel.Size = new System.Drawing.Size(1722, 1007);
-            this.HighscoresPanel.TabIndex = 89;
+            this.ControlsPanel.AutoScroll = true;
+            this.ControlsPanel.Controls.Add(this.picHoriControls);
+            this.ControlsPanel.Location = new System.Drawing.Point(186, 58);
+            this.ControlsPanel.Name = "ControlsPanel";
+            this.ControlsPanel.Size = new System.Drawing.Size(1722, 1007);
+            this.ControlsPanel.TabIndex = 89;
+            // 
+            // picHoriControls
+            // 
+            this.picHoriControls.Image = global::SE_Arcade_Launcher.Properties.Resources.HoriFightingStick;
+            this.picHoriControls.Location = new System.Drawing.Point(39, 25);
+            this.picHoriControls.Name = "picHoriControls";
+            this.picHoriControls.Size = new System.Drawing.Size(1647, 856);
+            this.picHoriControls.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picHoriControls.TabIndex = 9;
+            this.picHoriControls.TabStop = false;
             // 
             // SettingsPanel
             // 
@@ -469,6 +483,18 @@ namespace SE_Arcade_Launcher
             this.SettingsPanel.Name = "SettingsPanel";
             this.SettingsPanel.Size = new System.Drawing.Size(1722, 1007);
             this.SettingsPanel.TabIndex = 90;
+            // 
+            // lblControllerDebug
+            // 
+            this.lblControllerDebug.AutoSize = true;
+            this.lblControllerDebug.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblControllerDebug.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.lblControllerDebug.Location = new System.Drawing.Point(1284, 37);
+            this.lblControllerDebug.Name = "lblControllerDebug";
+            this.lblControllerDebug.Size = new System.Drawing.Size(61, 16);
+            this.lblControllerDebug.TabIndex = 100;
+            this.lblControllerDebug.Text = "DEBUG";
+            this.lblControllerDebug.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // RJoystickArea
             // 
@@ -845,17 +871,17 @@ namespace SE_Arcade_Launcher
             this.CPUChart.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
             this.CPUChart.BorderSkin.PageColor = System.Drawing.Color.Transparent;
             this.CPUChart.BorderSkin.SkinStyle = System.Windows.Forms.DataVisualization.Charting.BorderSkinStyle.FrameTitle1;
-            chartArea3.Name = "ChartArea1";
-            this.CPUChart.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.CPUChart.Legends.Add(legend3);
+            chartArea1.Name = "ChartArea1";
+            this.CPUChart.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.CPUChart.Legends.Add(legend1);
             this.CPUChart.Location = new System.Drawing.Point(9, 8);
             this.CPUChart.Name = "CPUChart";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series3.Legend = "Legend1";
-            series3.Name = "CPU";
-            this.CPUChart.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series1.Legend = "Legend1";
+            series1.Name = "CPU";
+            this.CPUChart.Series.Add(series1);
             this.CPUChart.Size = new System.Drawing.Size(452, 284);
             this.CPUChart.TabIndex = 1;
             this.CPUChart.Text = "chart1";
@@ -869,18 +895,18 @@ namespace SE_Arcade_Launcher
             this.RAMChart.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
             this.RAMChart.BorderSkin.PageColor = System.Drawing.Color.Transparent;
             this.RAMChart.BorderSkin.SkinStyle = System.Windows.Forms.DataVisualization.Charting.BorderSkinStyle.FrameTitle1;
-            chartArea4.Name = "ChartArea1";
-            this.RAMChart.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.RAMChart.Legends.Add(legend4);
+            chartArea2.Name = "ChartArea1";
+            this.RAMChart.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.RAMChart.Legends.Add(legend2);
             this.RAMChart.Location = new System.Drawing.Point(467, 8);
             this.RAMChart.Name = "RAMChart";
             this.RAMChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Berry;
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series4.Legend = "Legend1";
-            series4.Name = "RAM";
-            this.RAMChart.Series.Add(series4);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series2.Legend = "Legend1";
+            series2.Name = "RAM";
+            this.RAMChart.Series.Add(series2);
             this.RAMChart.Size = new System.Drawing.Size(452, 284);
             this.RAMChart.TabIndex = 0;
             this.RAMChart.Text = "chart1";
@@ -1048,6 +1074,7 @@ namespace SE_Arcade_Launcher
             this.btnExit.Text = "X";
             this.btnExit.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Visible = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // LockdownTimer
@@ -1055,32 +1082,20 @@ namespace SE_Arcade_Launcher
             this.LockdownTimer.Enabled = true;
             this.LockdownTimer.Tick += new System.EventHandler(this.LockdownTimer_Tick);
             // 
-            // lblControllerDebug
-            // 
-            this.lblControllerDebug.AutoSize = true;
-            this.lblControllerDebug.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblControllerDebug.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
-            this.lblControllerDebug.Location = new System.Drawing.Point(1284, 37);
-            this.lblControllerDebug.Name = "lblControllerDebug";
-            this.lblControllerDebug.Size = new System.Drawing.Size(61, 16);
-            this.lblControllerDebug.TabIndex = 100;
-            this.lblControllerDebug.Text = "DEBUG";
-            this.lblControllerDebug.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // frmMainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
-            this.ClientSize = new System.Drawing.Size(1920, 1080);
+            this.ClientSize = new System.Drawing.Size(1455, 894);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.lbltitle);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.ControlsPanel);
+            this.Controls.Add(this.GamesPanel);
             this.Controls.Add(this.SettingsPanel);
             this.Controls.Add(this.PerformancePanel);
             this.Controls.Add(this.CreditsPanel);
-            this.Controls.Add(this.HighscoresPanel);
-            this.Controls.Add(this.GamesPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmMainMenu";
             this.ShowIcon = false;
@@ -1095,6 +1110,8 @@ namespace SE_Arcade_Launcher
             this.GamesPanel.ResumeLayout(false);
             this.GamesPanel.PerformLayout();
             this.EditGameMenu.ResumeLayout(false);
+            this.ControlsPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picHoriControls)).EndInit();
             this.SettingsPanel.ResumeLayout(false);
             this.SettingsPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ControllerButton_RStick)).EndInit();
@@ -1140,7 +1157,7 @@ namespace SE_Arcade_Launcher
         private System.Windows.Forms.Button btnCalender;
         private System.Windows.Forms.Panel pnlNav;
         private System.Windows.Forms.Label lbltitle;
-        private System.Windows.Forms.Button btnHighscores;
+        private System.Windows.Forms.Button btnControls;
         private System.Windows.Forms.Panel GamesPanel;
         private System.Windows.Forms.TextBox SearchBox;
         private System.Windows.Forms.Button btnAddGame;
@@ -1148,7 +1165,7 @@ namespace SE_Arcade_Launcher
         private System.Windows.Forms.ToolStripMenuItem EditGame;
         private System.Windows.Forms.ToolStripMenuItem btnRemoveGame;
         private System.Windows.Forms.Button btnScanForGames;
-        private System.Windows.Forms.Panel HighscoresPanel;
+        private System.Windows.Forms.Panel ControlsPanel;
         private System.Windows.Forms.Panel SettingsPanel;
         private System.Windows.Forms.RichTextBox JoystickOutput;
         private System.Windows.Forms.Timer joystickTimer;
@@ -1206,6 +1223,7 @@ namespace SE_Arcade_Launcher
         private System.Windows.Forms.Panel LJoystickArea;
         private System.Windows.Forms.Panel RJoystickArea;
         private System.Windows.Forms.Label lblControllerDebug;
+        private System.Windows.Forms.PictureBox picHoriControls;
     }
 }
 

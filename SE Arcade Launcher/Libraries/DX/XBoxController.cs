@@ -123,16 +123,10 @@ namespace SE_Arcade_Launcher.Libraries.DX
             Start.Value = gamepad.Buttons.HasFlag(GamepadButtonFlags.Start);
             Back.Value = gamepad.Buttons.HasFlag(GamepadButtonFlags.Back);
 
-
-
-            // sut pik dpad
             Up.Value = gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp);
             Down.Value = gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown);
             Left.Value = gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft);
             Right.Value = gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight);
-
-
-
 
             LeftThumbclick.Value = gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftThumb);
             RightThumbclick.Value = gamepad.Buttons.HasFlag(GamepadButtonFlags.RightThumb);
@@ -146,6 +140,7 @@ namespace SE_Arcade_Launcher.Libraries.DX
 
             RightThumbstick.SetValue(gamepad.RightThumbX.RemapF(short.MinValue, short.MaxValue, MinThumb, MaxThumb),
                                        gamepad.RightThumbY.RemapF(short.MinValue, short.MaxValue, MinThumb, MaxThumb));
+
         }
 
         /// <summary>

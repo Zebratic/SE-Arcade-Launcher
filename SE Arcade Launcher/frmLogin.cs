@@ -36,7 +36,7 @@ namespace SE_Arcade_Launcher
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            this.ActiveControl = UsernameBox;
         }
 
         private void btnProceed_Click(object sender, EventArgs e)
@@ -49,10 +49,10 @@ namespace SE_Arcade_Launcher
                     this.Close();
                     return;
                 case LoginSystem.Response.Wrong_Username:
-                    MessageBox.Show("Wrong Username!", "SE Arcade Launcher");
+                    Notification.Alert("Wrong Username!", Notification.enmType.Warning);
                     break;
                 case LoginSystem.Response.Wrong_Password:
-                    MessageBox.Show("Wrong Password!", "SE Arcade Launcher");
+                    Notification.Alert("Wrong Password!", Notification.enmType.Warning);
                     break;
             }
         }

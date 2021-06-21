@@ -1,9 +1,4 @@
-- = Not done
-/ = In the works
-X = Finished
-
-- Highscore system
-- Record Playtime
+﻿- Record Playtime
 X Add PS4/PS3/Joystick Support for menu
 X Import steam library - Scan for games
 X manual add game files to library
@@ -14,11 +9,19 @@ X Game Settings
 - Credits system - bertram & laurits??
 X Settings page for launcher - show specs + performance
 - Setup Guide - Help Section
-/ Restrict certain processes
 X Make launch from startup and force fullscreen ish and topmost - Launcher
-- Inbuilt emulators?
+X plus and minus button down for 3 seconds ish to quit running game (send alt f4)
+X Launching screen (After effects video)
+- Shutdown prompt when holding down + - for 3+ seconds (B = no, A = yes)
+X up up down down left right left right B A
+X SUS Easter egg song
+- Fix inconsistent inputs from controller
+
+
+Inbuilt emulators?
   - SNES: https://github.com/Kookpot/SuperNintendoEmulator
   - NES: https://github.com/Xyene/Emulator.NES
   - GAME BOY: https://github.com/BluestormDNA/ProjectDMG
   - MAME: https://github.com/mamedev/mame
   - SWITCH: https://github.com/Ryujinx/Ryujinx
+  - MULIT: https://mgalaxy.com/

@@ -28,7 +28,6 @@ namespace SE_Arcade_Launcher.Libraries.DX
         }
 
         public bool IsValueChanged
-
         {
             get => !Value.Equals(PreviousValue);
         }

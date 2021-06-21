@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Media;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -31,9 +32,12 @@ namespace SE_Arcade_Launcher
                 }
             }
 
+            //SoundPlayer player = new SoundPlayer(Environment.CurrentDirectory + @"\StartupSound.wav");
+            //player.Play();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMainMenu());
+            Application.Run(new frmStartup());
         }
     }
 }

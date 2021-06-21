@@ -25,13 +25,21 @@ namespace SE_Arcade_Launcher
                 if (fvi.FileVersion != currentversion)
                 {
                     string currentpath = Assembly.GetExecutingAssembly().Location;
+                    File.Delete(currentpath.Substring(0, currentpath.Length - 4) + ".old.exe");
+                    Thread.Sleep(1000);
                     File.Move(currentpath, currentpath.Substring(0, currentpath.Length - 4) + ".old.exe");
-                    wc.DownloadFile("https://github.com/Zebratic/SE-Arcade-Launcher/main/SE-Arcade-Launcher", "SE Arcade Launcher.exe");
+                    Thread.Sleep(1000);
+                    wc.DownloadFile("https://github.com/Zebratic/SE-Arcade-Launcher/releases/download/Updates/SE.Arcade.Launcher.exe", "SE Arcade Launcher.exe");
+                    Thread.Sleep(1000);
+                    Notification.Alert("Updated", Notification.enmType.Success);
+                    Process.Start(currentpath.Substring(0, currentpath.Length - 4) + ".old.exe");
+                    Environment.Exit(0);
+                    Application.Exit();
                 }
             }
             catch
             {
-                MessageBox.Show("Failed to obtain version info!", "SE Arcade Launcher");
+                Notification.Alert("Failed to obtain online version info", Notification.enmType.Warning);
             }
         }
     }
